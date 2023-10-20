@@ -1,0 +1,15 @@
+<div class="app">
+    <h1>Listado de peliculas</h1>
+    <div class="search">
+        <input type="text" #movieSarchInput #search placeholder="buscar pelicula">
+        
+    </div>
+    <div  *ngIf="movies.length > 0 ; else empty"class="container">
+        <app-card-movies *ngFor="let movie of movies" [movie]="movie"></app-card-movies>
+    </div>
+
+    <ng-template #empty    class="empty">
+        <h3 class="badge badge-primary"> no se encontraron peliculas</h3>
+    </ng-template>
+</div>
+
