@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { from, fromEvent } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { distinct, filter, map, tap } from 'rxjs/operators';
 import { MovieService } from 'src/app/services/movie.service';
 
 @Component({
@@ -8,8 +8,8 @@ import { MovieService } from 'src/app/services/movie.service';
   templateUrl: './movies.component.html',
   styleUrls: ['./movies.component.css']
 })
-export class MoviesComponent implements OnInit  {
-  @ViewChild(`#movieSarchInput`,{static:true}) movieSarchInput!:ElementRef //para que se vaya el error ponemnos !
+export class MoviesComponent implements OnInit ,AfterViewInit  {
+  @ViewChild(`movieSarchInput`,{static:true}) movieSarchInput!:ElementRef //para que se vaya el error ponemnos !
   movies:any[] = []
   constructor(private serviceMovie: MovieService) { }
 
@@ -19,10 +19,16 @@ export class MoviesComponent implements OnInit  {
         const searchTermn =  (event.target as HTMLInputElement).value;
         return searchTermn
       }),
+      filter((searchTerm : string) =>searchTerm.length>3),
+      distinct(),
       tap( (searchTerm : string) =>console.log(searchTerm))
     ).subscribe((searhTermn:string) =>{
       this.getMovies(searhTermn)
     })
+  }
+
+  ngAfterViewInit(): void {
+
   }
 
 
